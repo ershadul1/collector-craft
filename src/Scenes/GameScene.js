@@ -25,32 +25,32 @@ export default class GameScene extends Phaser.Scene {
 
     this.player = this.physics.add
       .sprite(spawnPoint.x, spawnPoint.y, 'player', 2)
-      .setSize(32, 37)
+      .setSize(32, 32)
       .setOffset(0, 24);
 
     this.physics.add.collider(this.player, structureLayer);
 
     this.anims.create({
       key: 'left',
-      frames: this.anims.generateFrameNumbers('player', { start: 9, end: 11 }),
+      frames: this.anims.generateFrameNumbers('player', { start: 8, end: 11 }),
       frameRate: 10,
       repeat: -1,
     });
     this.anims.create({
       key: 'right',
-      frames: this.anims.generateFrameNumbers('player', { start: 3, end: 5 }),
+      frames: this.anims.generateFrameNumbers('player', { start: 4, end: 7 }),
       frameRate: 10,
       repeat: -1,
     });
     this.anims.create({
       key: 'up',
-      frames: this.anims.generateFrameNumbers('player', { start: 6, end: 8 }),
+      frames: this.anims.generateFrameNumbers('player', { start: 16, end: 19 }),
       frameRate: 10,
       repeat: -1,
     });
     this.anims.create({
       key: 'down',
-      frames: this.anims.generateFrameNumbers('player', { start: 0, end: 2 }),
+      frames: this.anims.generateFrameNumbers('player', { start: 12, end: 15 }),
       frameRate: 10,
       repeat: -1,
     });
@@ -58,6 +58,10 @@ export default class GameScene extends Phaser.Scene {
     const camera = this.cameras.main;
     camera.startFollow(this.player);
     camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+
+    this.physics.world.bounds.width = map.widthInPixels;
+    this.physics.world.bounds.height = map.heightInPixels;
+    this.player.setCollideWorldBounds(true);
   }
 
   update() {
