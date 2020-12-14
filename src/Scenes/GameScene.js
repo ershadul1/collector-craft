@@ -5,11 +5,6 @@ export default class GameScene extends Phaser.Scene {
     super('Game');
   }
 
-
-  preload() {
-    
-  }
-
   create() {
     const map = this.make.tilemap({ key: 'map' });
     const tileset = map.addTilesetImage('tiles', 'tiles');
@@ -55,6 +50,34 @@ export default class GameScene extends Phaser.Scene {
       repeat: -1,
     });
 
+    this.coins = this.physics.add.group();
+    const coinPositions = map.objects[0].objects.filter(obj => obj.name === 'points');
+
+    coinPositions.forEach(element => {
+      this.coins.create(element.x, element.y, 'coin');
+    });
+
+    this.anims.create({
+      key: 'spin',
+      frames: this.anims.generateFrameNumbers('coin', { start: 0, end: 5 }),
+      frameRate: 10,
+      repeat: -1,
+    });
+
+    this.physics.add.overlap(this.player, this.coins, this.collectCoin, null, this);
+
+    this.score = 0;
+
+    this.scoreText = this.add
+      .text(16, 16, `Score: ${this.score}`, {
+        font: '18px monospace',
+        fill: '#ffffff',
+        padding: { x: 20, y: 10 },
+        backgroundColor: '#000000',
+      })
+      .setScrollFactor(0);
+
+
     const camera = this.cameras.main;
     camera.startFollow(this.player);
     camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
@@ -62,6 +85,48 @@ export default class GameScene extends Phaser.Scene {
     this.physics.world.bounds.width = map.widthInPixels;
     this.physics.world.bounds.height = map.heightInPixels;
     this.player.setCollideWorldBounds(true);
+
+
+    this.spawns = this.physics.add.group({ classType: Phaser.GameObjects.Zone });
+    for (let i = 0; i < 200; i += 1) {
+      const x = Phaser.Math.RND.between(0, this.physics.world.bounds.width);
+      const y = Phaser.Math.RND.between(0, this.physics.world.bounds.height);
+      // parameters are x, y, width, height
+      this.spawns.create(x, y, 20, 20);
+    }
+    // add collider
+    this.physics.add.overlap(this.player, this.spawns, this.onMeetEnemy, false, this);
+    // we listen for 'wake' event
+    this.sys.events.on('wake', this.wake, this);
+  }
+
+  wake() {
+    this.cursors.left.reset();
+    this.cursors.right.reset();
+    this.cursors.up.reset();
+    this.cursors.down.reset();
+  }
+
+  onMeetEnemy(player, zone) {
+    // we move the zone to some other location
+    zone.x = Phaser.Math.RND.between(0, this.physics.world.bounds.width);
+    zone.y = Phaser.Math.RND.between(0, this.physics.world.bounds.height);
+
+    // shake the world
+    this.cameras.main.shake(300);
+
+    this.input.stopPropagation();
+    // start battle
+    this.scene.switch('BattleScene');
+  }
+
+
+  collectCoin(player, coin) {
+    coin.disableBody(true, true);
+
+    //  Add and update the score
+    this.score += 10;
+    this.scoreText.setText(`Score: ${this.score}`);
   }
 
   update() {
@@ -86,7 +151,7 @@ export default class GameScene extends Phaser.Scene {
 
     player.body.velocity.normalize().scale(speed);
 
-
+    // Player movement animation
     if (cursors.left.isDown) {
       player.anims.play('left', true);
     } else if (cursors.right.isDown) {
@@ -98,5 +163,11 @@ export default class GameScene extends Phaser.Scene {
     } else {
       player.anims.stop();
     }
+
+    // Coin rotation animation
+
+    this.coins.children.iterate((child) => {
+      child.play('spin', true);
+    });
   }
 }
