@@ -8,7 +8,7 @@ const submitScore = async (user, score) => {
       },
       body: JSON.stringify(data),
     });
-  } catch (err) {
+  } catch {
     throw new Error('Failed to submit data to API');
   }
 };
