@@ -12,7 +12,6 @@ export default class GameScene extends Phaser.Scene {
     const map = this.make.tilemap({ key: 'map' });
     const tileset = map.addTilesetImage('tiles', 'tiles');
 
-    // const worldLayer =
     map.createStaticLayer('ground', tileset, 0, 0);
 
     const structureLayer = map.createStaticLayer('structures', tileset, 0, 0);
@@ -103,13 +102,11 @@ export default class GameScene extends Phaser.Scene {
     for (let i = 0; i < 200; i += 1) {
       const x = Phaser.Math.RND.between(0, this.physics.world.bounds.width);
       const y = Phaser.Math.RND.between(0, this.physics.world.bounds.height);
-      // parameters are x, y, width, height
+      
       this.spawns.create(x, y, 20, 20);
     }
-    // add collider
+
     this.physics.add.overlap(this.player, this.spawns, this.onMeetEnemy, false, this);
-    // we listen for 'wake' event
-    // this.sys.events.on('wake', this.wake, this);
   }
 
   resetCursors() {
@@ -121,15 +118,13 @@ export default class GameScene extends Phaser.Scene {
   }
 
   onMeetEnemy(player, zone) {
-    // we move the zone to some other location
     zone.x = Phaser.Math.RND.between(0, this.physics.world.bounds.width);
     zone.y = Phaser.Math.RND.between(0, this.physics.world.bounds.height);
 
-    // shake the world
     this.cameras.main.shake(300);
 
     this.input.stopPropagation();
-    // start battle
+
     const cursors = this.input.keyboard.createCursorKeys();
     cursors.left.reset();
     cursors.right.reset();
