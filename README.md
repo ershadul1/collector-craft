@@ -13,6 +13,12 @@ vaccine.
 Your goal is to collect all the 10 coins. In your adventure, you will face the zombies randomly.
 You will have to fight them in a turn-based fight. 
 
+The zombies can appear randomly on the map. Player will lose life while battling with 
+the zombies.
+
+The game will be over after the player loses all of his life points. Or if the player can
+collect all coins.
+
 ## Screenshot
 
 ![](./screenshots/screenshot-1.png)
@@ -25,6 +31,7 @@ You will have to fight them in a turn-based fight.
 1. Player score will increase by 100 if one coin is collected.
 1. Player can fight with the zombies.
 1. Player and Zombies have life points.
+1. Player can save his scores with name after the game is over.
 
 ## How to play the game?
 
