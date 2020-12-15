@@ -20,7 +20,7 @@ export default class LeaderBoardScene extends Phaser.Scene {
     if (this.topScoredPlayers) {
       this.titleText.setText('Top 10 players');
       this.menuButton = new Button(this, 400, 550, 'blueButton1', 'blueButton2', 'Menu', 'Title');
-      const players = sortScores(this.topScoredPlayers.result)
+      const players = sortScores(this.topScoredPlayers.result);
       for (let index = 0; index < 10; index += 1) {
         if (players[index]) {
           this.add.text(

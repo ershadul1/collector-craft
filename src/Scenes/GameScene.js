@@ -102,7 +102,7 @@ export default class GameScene extends Phaser.Scene {
     for (let i = 0; i < 200; i += 1) {
       const x = Phaser.Math.RND.between(0, this.physics.world.bounds.width);
       const y = Phaser.Math.RND.between(0, this.physics.world.bounds.height);
-      
+
       this.spawns.create(x, y, 20, 20);
     }
 
