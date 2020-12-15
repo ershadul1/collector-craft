@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import gameState from '../game-state/gameState';
 
 export default class GameScene extends Phaser.Scene {
   constructor() {
@@ -66,10 +67,10 @@ export default class GameScene extends Phaser.Scene {
 
     this.physics.add.overlap(this.player, this.coins, this.collectCoin, null, this);
 
-    this.score = 0;
+    gameState.score = 0;
 
     this.scoreText = this.add
-      .text(16, 16, `Score: ${this.score}`, {
+      .text(16, 16, `Score: ${gameState.score}`, {
         font: '18px monospace',
         fill: '#ffffff',
         padding: { x: 20, y: 10 },
@@ -77,6 +78,15 @@ export default class GameScene extends Phaser.Scene {
       })
       .setScrollFactor(0);
 
+
+    this.coinText = this.add
+    .text(500, 16, `Coins collected: ${gameState.coins}`, {
+      font: '18px monospace',
+      fill: '#ffffff',
+      padding: { x: 20, y: 10 },
+      backgroundColor: '#000000',
+    })
+    .setScrollFactor(0);
 
     const camera = this.cameras.main;
     camera.startFollow(this.player);
@@ -117,7 +127,13 @@ export default class GameScene extends Phaser.Scene {
 
     this.input.stopPropagation();
     // start battle
-    this.scene.switch('BattleScene');
+    const cursors = this.input.keyboard.createCursorKeys();
+    cursors.left.reset();
+            cursors.right.reset();
+            cursors.up.reset();
+            cursors.down.reset();
+
+    this.scene.switch('Battle');
   }
 
 
@@ -125,40 +141,42 @@ export default class GameScene extends Phaser.Scene {
     coin.disableBody(true, true);
 
     //  Add and update the score
-    this.score += 10;
-    this.scoreText.setText(`Score: ${this.score}`);
+    gameState.coins += 1;
+    gameState.score += 100;
+    gameState.life += 10;
+    
   }
 
   update() {
     const { player } = this;
-    const cursors = this.input.keyboard.createCursorKeys();
+    this.cursors = this.input.keyboard.createCursorKeys();
     this.player.body.setVelocity(0);
 
     const speed = 200;
     // Horizontal movement
-    if (cursors.left.isDown) {
+    if (this.cursors.left.isDown) {
       player.body.setVelocityX(-speed);
-    } else if (cursors.right.isDown) {
+    } else if (this.cursors.right.isDown) {
       player.body.setVelocityX(speed);
     }
 
     // Vertical movement
-    if (cursors.up.isDown) {
+    if (this.cursors.up.isDown) {
       player.body.setVelocityY(-speed);
-    } else if (cursors.down.isDown) {
+    } else if (this.cursors.down.isDown) {
       player.body.setVelocityY(speed);
     }
 
     player.body.velocity.normalize().scale(speed);
 
     // Player movement animation
-    if (cursors.left.isDown) {
+    if (this.cursors.left.isDown) {
       player.anims.play('left', true);
-    } else if (cursors.right.isDown) {
+    } else if (this.cursors.right.isDown) {
       player.anims.play('right', true);
-    } else if (cursors.up.isDown) {
+    } else if (this.cursors.up.isDown) {
       player.anims.play('up', true);
-    } else if (cursors.down.isDown) {
+    } else if (this.cursors.down.isDown) {
       player.anims.play('down', true);
     } else {
       player.anims.stop();
@@ -169,5 +187,9 @@ export default class GameScene extends Phaser.Scene {
     this.coins.children.iterate((child) => {
       child.play('spin', true);
     });
+
+
+    this.scoreText.setText(`Score: ${gameState.score}`);
+    this.coinText.setText(`Coins collected: ${gameState.coins}`);
   }
 }

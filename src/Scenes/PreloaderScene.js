@@ -91,6 +91,8 @@ export default class PreloaderScene extends Phaser.Scene {
     this.load.tilemapTiledJSON('map', 'src/assets/map/map.json');
     this.load.spritesheet('player', 'src/assets/boy.png', { frameWidth: 50, frameHeight: 50 });
     this.load.spritesheet('coin', 'src/assets/coin.png', { frameWidth: 32, frameHeight: 32 });
+    this.load.spritesheet('enemy', 'src/assets/crow-man.png', { frameWidth: 80, frameHeight: 118 });
+    this.load.image('background', 'src/assets/background.png');
   }
 
   ready() {
