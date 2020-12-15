@@ -7,6 +7,8 @@ export default class GameScene extends Phaser.Scene {
   }
 
   create() {
+    this.resetCursors();
+
     const map = this.make.tilemap({ key: 'map' });
     const tileset = map.addTilesetImage('tiles', 'tiles');
 
@@ -80,13 +82,13 @@ export default class GameScene extends Phaser.Scene {
 
 
     this.coinText = this.add
-    .text(500, 16, `Coins collected: ${gameState.coins}`, {
-      font: '18px monospace',
-      fill: '#ffffff',
-      padding: { x: 20, y: 10 },
-      backgroundColor: '#000000',
-    })
-    .setScrollFactor(0);
+      .text(500, 16, `Coins collected: ${gameState.coins}`, {
+        font: '18px monospace',
+        fill: '#ffffff',
+        padding: { x: 20, y: 10 },
+        backgroundColor: '#000000',
+      })
+      .setScrollFactor(0);
 
     const camera = this.cameras.main;
     camera.startFollow(this.player);
@@ -107,14 +109,15 @@ export default class GameScene extends Phaser.Scene {
     // add collider
     this.physics.add.overlap(this.player, this.spawns, this.onMeetEnemy, false, this);
     // we listen for 'wake' event
-    this.sys.events.on('wake', this.wake, this);
+    // this.sys.events.on('wake', this.wake, this);
   }
 
-  wake() {
-    this.cursors.left.reset();
-    this.cursors.right.reset();
-    this.cursors.up.reset();
-    this.cursors.down.reset();
+  resetCursors() {
+    const cursors = this.input.keyboard.createCursorKeys();
+    cursors.left.reset();
+    cursors.right.reset();
+    cursors.up.reset();
+    cursors.down.reset();
   }
 
   onMeetEnemy(player, zone) {
@@ -129,9 +132,9 @@ export default class GameScene extends Phaser.Scene {
     // start battle
     const cursors = this.input.keyboard.createCursorKeys();
     cursors.left.reset();
-            cursors.right.reset();
-            cursors.up.reset();
-            cursors.down.reset();
+    cursors.right.reset();
+    cursors.up.reset();
+    cursors.down.reset();
 
     this.scene.switch('Battle');
   }
@@ -144,7 +147,10 @@ export default class GameScene extends Phaser.Scene {
     gameState.coins += 1;
     gameState.score += 100;
     gameState.life += 10;
-    
+
+    if (gameState.coins === 10) {
+      this.scene.switch('Over');
+    }
   }
 
   update() {
