@@ -44,7 +44,7 @@ You will have to fight them in a turn-based fight.
 
 ## Live Demo
 
-- [Collector Craft](https://rawcdn.githack.com/ershadul1/weather-now/6c8c81d30cd655a3be950b403f617b02b512ea1b/dist/index.html)
+- [Collector Craft](https://eloquent-wing-438537.netlify.app/)
 
 ## How to run this project on your local machine
 
@@ -96,6 +96,5 @@ Give a ⭐️ if you like this project!
 
 ## Acknowledgments
 - This project was inspired by the [Microverse](https:www.microverse.org) program
-- Open Weather API
 - Game Assets were taken from [Open Game Art](https://opengameart.org/)
 - Map tileset was taken from this [Github Repo](https://github.com/mikewesthad/phaser-3-tilemap-blog-posts/tree/master/examples/post-1)
